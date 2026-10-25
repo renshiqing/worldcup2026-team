@@ -1,4 +1,3 @@
-
 <?php
 
 use yii\helpers\Html;
@@ -162,20 +161,28 @@ $statusLabels = [
                                 <?php endif; ?>
                             </td>
 
-                            <td>
-                                <?= Html::encode($match['home_team']) ?>
-                            </td>
-
+                           
+ 			    <td>
+            <?= Html::a(
+        Html::encode($match['home_team']),
+        ['/team/view', 'id' => $match['home_team_id']],
+        ['title' => '查看主队详情']
+    ) ?>
+                           </td>
                             <td>
                                 <strong>
                                     <?= Html::encode($score) ?>
                                 </strong>
                             </td>
 
-                            <td>
-                                <?= Html::encode($match['away_team']) ?>
-                            </td>
-
+                            
+			    <td>
+    <?= Html::a(
+        Html::encode($match['away_team']),
+        ['/team/view', 'id' => $match['away_team_id']],
+        ['title' => '查看客队详情']
+    ) ?>
+			   </td>
                             <td>
                                 <?= Html::encode($venue) ?>
                             </td>

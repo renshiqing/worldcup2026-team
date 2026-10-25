@@ -58,6 +58,8 @@ class MatchController extends Controller
     $query = (new Query())
         ->select([
             'm.id',
+            'm.home_team_id',
+            'm.away_team_id',
             'm.kickoff_at',
             'm.home_score',
             'm.away_score',
@@ -68,6 +70,7 @@ class MatchController extends Controller
             'away_team' => 'away.name',
             'stadium_name' => 'stadium.name',
             'city_name' => 'city.name',
+           
         ])
         ->from(['m' => '{{%football_match}}'])
         ->innerJoin(
