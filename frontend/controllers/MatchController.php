@@ -6,58 +6,126 @@ use yii\web\Controller;
 
 class MatchController extends Controller
 {
+  
     public function actionIndex()
-    {
-        $matches = (new Query())
-            ->select([
-                'm.id',
-                'm.kickoff_at',
-                'm.home_score',
-                'm.away_score',
-                'm.status',
-                'stage_name' => 'stage.stage_name',
-                'group_name' => 'grp.group_name',
-                'home_team' => 'home.name',
-                'away_team' => 'away.name',
-                'stadium_name' => 'stadium.name',
-                'city_name' => 'city.name',
-            ])
-            ->from(['m' => '{{%football_match}}'])
-            ->innerJoin(
-                ['stage' => '{{%match_stage}}'],
-                'stage.id = m.stage_id'
-            )
-            ->leftJoin(
-                ['grp' => '{{%tournament_group}}'],
-                'grp.id = m.group_id'
-            )
-            ->innerJoin(
-                ['home' => '{{%football_team}}'],
-                'home.id = m.home_team_id'
-            )
-            ->innerJoin(
-                ['away' => '{{%football_team}}'],
-                'away.id = m.away_team_id'
-            )
-            ->leftJoin(
-                ['stadium' => '{{%stadium}}'],
-                'stadium.id = m.stadium_id'
-            )
-            ->leftJoin(
-                ['city' => '{{%host_city}}'],
-                'city.id = stadium.city_id'
-            )
-            ->orderBy([
-                'm.kickoff_at' => SORT_ASC,
-                'm.id' => SORT_ASC,
-            ])
-            ->all();
+{
+    // 1. 获取所有小组
+    $groups = (new Query())
+        ->select(['group_name'])
+        ->from('{{%tournament_group}}')
+        ->orderBy(['group_name' => SORT_ASC])
+        ->column();
 
-        return $this->render('index', [
-            'matches' => $matches,
+    $groupOptions = ['all' => '全部小组'];
+
+    foreach ($groups as $groupName) {
+        $groupOptions[$groupName] = $groupName . '组';
+    }
+
+    // 2. 定义可筛选的比赛状态
+    $statusOptions = [
+        'all' => '全部状态',
+        'finished' => '已结束',
+        'scheduled' => '待开赛',
+        'live' => '进行中',
+        'postponed' => '已延期',
+        'cancelled' => '已取消',
+    ];
+
+    // 3. 读取用户选择的筛选条件
+    $selectedGroup = \Yii::$app->request->get('group', 'all');
+    $selectedStatus = \Yii::$app->request->get('status', 'all');
+
+    // 校验输入，避免无效筛选值
+    if (
+        !is_string($selectedGroup) ||
+        (
+            $selectedGroup !== 'all' &&
+            !in_array($selectedGroup, $groups, true)
+        )
+    ) {
+        $selectedGroup = 'all';
+    }
+
+    if (
+        !is_string($selectedStatus) ||
+        !isset($statusOptions[$selectedStatus])
+    ) {
+        $selectedStatus = 'all';
+    }
+
+    // 4. 查询比赛及关联数据
+    $query = (new Query())
+        ->select([
+            'm.id',
+            'm.kickoff_at',
+            'm.home_score',
+            'm.away_score',
+            'm.status',
+            'stage_name' => 'stage.stage_name',
+            'group_name' => 'grp.group_name',
+            'home_team' => 'home.name',
+            'away_team' => 'away.name',
+            'stadium_name' => 'stadium.name',
+            'city_name' => 'city.name',
+        ])
+        ->from(['m' => '{{%football_match}}'])
+        ->innerJoin(
+            ['stage' => '{{%match_stage}}'],
+            'stage.id = m.stage_id'
+        )
+        ->leftJoin(
+            ['grp' => '{{%tournament_group}}'],
+            'grp.id = m.group_id'
+        )
+        ->innerJoin(
+            ['home' => '{{%football_team}}'],
+            'home.id = m.home_team_id'
+        )
+        ->innerJoin(
+            ['away' => '{{%football_team}}'],
+            'away.id = m.away_team_id'
+        )
+        ->leftJoin(
+            ['stadium' => '{{%stadium}}'],
+            'stadium.id = m.stadium_id'
+        )
+        ->leftJoin(
+            ['city' => '{{%host_city}}'],
+            'city.id = stadium.city_id'
+        );
+
+    // 5. 按小组筛选
+    if ($selectedGroup !== 'all') {
+        $query->andWhere([
+            'grp.group_name' => $selectedGroup,
         ]);
     }
 
+    // 6. 按比赛状态筛选
+    if ($selectedStatus !== 'all') {
+        $query->andWhere([
+            'm.status' => $selectedStatus,
+        ]);
+    }
+
+    // 7. 按开赛时间排序
+    $matches = $query
+        ->orderBy([
+            'm.kickoff_at' => SORT_ASC,
+            'm.id' => SORT_ASC,
+        ])
+        ->all();
+
+    // 8. 将数据和筛选条件传给页面
+    return $this->render('index', [
+        'matches' => $matches,
+        'groupOptions' => $groupOptions,
+        'selectedGroup' => $selectedGroup,
+        'statusOptions' => $statusOptions,
+        'selectedStatus' => $selectedStatus,
+    ]);
+}
     public function actionStandings()
     {
         $groups = (new Query())

@@ -20,7 +20,74 @@ $statusLabels = [
     <p class="text-muted">
         当前页面使用本地演示数据，不代表官方赛程及比赛结果。
     </p>
+  <!-- 比赛筛选栏 -->
+<div class="panel panel-default">
+    <div class="panel-body">
 
+        <?= Html::beginForm(
+            ['match/index'],
+            'get',
+            ['class' => 'form-inline']
+        ) ?>
+
+        <div class="form-group" style="margin-right: 12px;">
+            <?= Html::label(
+                '比赛小组：',
+                'group',
+                ['style' => 'margin-right: 6px;']
+            ) ?>
+
+            <?= Html::dropDownList(
+                'group',
+                $selectedGroup,
+                $groupOptions,
+                [
+                    'id' => 'group',
+                    'class' => 'form-control',
+                ]
+            ) ?>
+        </div>
+
+        <div class="form-group" style="margin-right: 12px;">
+            <?= Html::label(
+                '比赛状态：',
+                'status',
+                ['style' => 'margin-right: 6px;']
+            ) ?>
+
+            <?= Html::dropDownList(
+                'status',
+                $selectedStatus,
+                $statusOptions,
+                [
+                    'id' => 'status',
+                    'class' => 'form-control',
+                ]
+            ) ?>
+        </div>
+
+        <?= Html::submitButton(
+            '筛选比赛',
+            ['class' => 'btn btn-success']
+        ) ?>
+
+        <?= Html::a(
+            '重置',
+            ['match/index'],
+            [
+                'class' => 'btn btn-default',
+                'style' => 'margin-left: 6px;',
+            ]
+        ) ?>
+
+        <?= Html::endForm() ?>
+
+    </div>
+</div>
+
+<p class="text-muted">
+    当前筛选结果：<?= count($matches) ?> 场比赛
+</p>
     <p>
         <?= Html::a(
             '查看小组积分榜',
@@ -30,7 +97,10 @@ $statusLabels = [
     </p>
 
     <?php if (empty($matches)): ?>
-        <div class="alert alert-info">当前没有比赛数据。</div>
+        
+        <div class="alert alert-info">
+    没有符合当前筛选条件的比赛，请调整筛选条件或点击“重置”。
+</div>
     <?php else: ?>
 
         <div class="table-responsive">
