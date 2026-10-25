@@ -9,22 +9,23 @@ $this->title = '球队信息';
     <h1><?= Html::encode($this->title) ?></h1>
 
     <p class="text-muted">
-        查看世界杯演示球队、所属小组和国家信息。
+        点击球队名称，查看球队详情及其参加的比赛。
     </p>
 
     <?php if (empty($teams)): ?>
         <div class="alert alert-info">
-            暂无球队数据，请先录入球队。
+            暂无球队数据。
         </div>
     <?php else: ?>
         <div class="table-responsive">
             <table class="table table-striped table-bordered">
                 <thead>
                     <tr>
-                        <th>球队编号</th>
+                        <th>编号</th>
                         <th>球队名称</th>
                         <th>所属小组</th>
                         <th>国家或地区</th>
+                        <th>操作</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -34,7 +35,10 @@ $this->title = '球队信息';
                                 <?= Html::encode($team['id']) ?>
                             </td>
                             <td>
-                                <?= Html::encode($team['name']) ?>
+                                <?= Html::a(
+                                    Html::encode($team['name']),
+                                    ['/team/view', 'id' => $team['id']]
+                                ) ?>
                             </td>
                             <td>
                                 <?= Html::encode(
@@ -43,6 +47,13 @@ $this->title = '球队信息';
                             </td>
                             <td>
                                 <?= Html::encode($team['country']) ?>
+                            </td>
+                            <td>
+                                <?= Html::a(
+                                    '查看详情',
+                                    ['/team/view', 'id' => $team['id']],
+                                    ['class' => 'btn btn-primary btn-sm']
+                                ) ?>
                             </td>
                         </tr>
                     <?php endforeach; ?>
