@@ -29,17 +29,37 @@ AppAsset::register($this);
 <div class="wrap">
     <?php
     NavBar::begin([
-        'brandLabel' => Yii::$app->name,
+        'brandLabel' => 'WORLD CUP 2026',
         'brandUrl' => Yii::$app->homeUrl,
         'options' => [
             'class' => 'navbar-inverse navbar-fixed-top',
         ],
     ]);
-    $menuItems = [
-        ['label' => 'Home', 'url' => ['/site/index']],
-        ['label' => 'About', 'url' => ['/site/about']],
-        ['label' => 'Contact', 'url' => ['/site/contact']],
-    ];
+  
+  
+$menuItems = [
+    [
+        'label' => '首页',
+        'url' => ['/site/index'],
+    ],
+    [
+        'label' => '比赛赛程',
+        'url' => ['/match/index'],
+    ],
+    [
+        'label' => '小组积分榜',
+        'url' => ['/match/standings'],
+    ],
+    [
+        'label' => '球队信息',
+        'url' => ['/team/index'],
+    ],
+    [
+        'label' => '场馆信息',
+        'url' => ['/stadium/index'],
+    ],
+];
+
     if (Yii::$app->user->isGuest) {
         $menuItems[] = ['label' => 'Signup', 'url' => ['/site/signup']];
         $menuItems[] = ['label' => 'Login', 'url' => ['/site/login']];
