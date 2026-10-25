@@ -129,6 +129,45 @@ class MatchController extends Controller
         'selectedStatus' => $selectedStatus,
     ]);
 }
+    public function actionView($id)
+{
+    $match = (new \yii\db\Query())
+        ->select([
+            'm.id',
+            'm.kickoff_at',
+            'm.home_score',
+            'm.away_score',
+            'm.status',
+            'm.home_team_id',
+            'm.away_team_id',
+            'home_team_name' => 'ht.name',
+            'home_country' => 'ht.country',
+            'away_team_name' => 'at.name',
+            'away_country' => 'at.country',
+            'stage_name' => 'ms.stage_name',
+            'group_name' => 'tg.group_name',
+            'stadium_name' => 's.name',
+            'city_name' => 'c.name',
+            'city_country' => 'c.country',
+        ])
+        ->from(['m' => 'football_match'])
+        ->innerJoin(['ms' => 'match_stage'], 'ms.id = m.stage_id')
+        ->leftJoin(['tg' => 'tournament_group'], 'tg.id = m.group_id')
+        ->innerJoin(['ht' => 'football_team'], 'ht.id = m.home_team_id')
+        ->innerJoin(['at' => 'football_team'], 'at.id = m.away_team_id')
+        ->leftJoin(['s' => 'stadium'], 's.id = m.stadium_id')
+        ->leftJoin(['c' => 'host_city'], 'c.id = s.city_id')
+        ->where(['m.id' => (int)$id])
+        ->one();
+
+    if (!$match) {
+        throw new \yii\web\NotFoundHttpException('找不到该比赛。');
+    }
+
+    return $this->render('view', [
+        'match' => $match,
+    ]);
+}
     public function actionStandings()
     {
         $groups = (new Query())
