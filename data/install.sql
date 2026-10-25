@@ -40,7 +40,7 @@ CREATE TABLE `fan_message` (
   `updated_at` int(11) NOT NULL DEFAULT 0,
   PRIMARY KEY (`id`),
   KEY `idx-fan_message-status-created` (`status`,`created_at`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -49,6 +49,7 @@ CREATE TABLE `fan_message` (
 
 LOCK TABLES `fan_message` WRITE;
 /*!40000 ALTER TABLE `fan_message` DISABLE KEYS */;
+INSERT INTO `fan_message` VALUES (1,'演示球迷甲',NULL,'建议增加球员详情','希望球队详情页能够展示球员号码、位置和出生日期，方便查看球队阵容。','pending',1792927432,1792927432),(2,'演示球迷乙','demo@example.com','建议增加赛程筛选','希望比赛页面能够支持按比赛日期筛选，方便快速找到感兴趣的比赛。','pending',1792927432,1792927432);
 /*!40000 ALTER TABLE `fan_message` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -229,7 +230,7 @@ CREATE TABLE `migration` (
 
 LOCK TABLES `migration` WRITE;
 /*!40000 ALTER TABLE `migration` DISABLE KEYS */;
-INSERT INTO `migration` VALUES ('m000000_000000_base',1792894283),('m130524_201442_init',1792894290),('m190124_110200_add_verification_token_column_to_user_table',1792894290),('m261025_023610_create_worldcup_base_tables',1792896758),('m261025_025415_create_worldcup_core_tables',1792897010),('m261025_025908_seed_worldcup_reference_data',1792897301),('m261025_030429_seed_worldcup_demo_data',1792897655),('m261025_063751_add_worldcup_extension_tables',1792910900);
+INSERT INTO `migration` VALUES ('m000000_000000_base',1792894283),('m130524_201442_init',1792894290),('m190124_110200_add_verification_token_column_to_user_table',1792894290),('m261025_023610_create_worldcup_base_tables',1792896758),('m261025_025415_create_worldcup_core_tables',1792897010),('m261025_025908_seed_worldcup_reference_data',1792897301),('m261025_030429_seed_worldcup_demo_data',1792897655),('m261025_063751_add_worldcup_extension_tables',1792910900),('m261025_112207_seed_worldcup_demo_content',1792927432);
 /*!40000 ALTER TABLE `migration` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -251,7 +252,7 @@ CREATE TABLE `news_article` (
   `updated_at` int(11) NOT NULL DEFAULT 0,
   PRIMARY KEY (`id`),
   KEY `idx-news_article-status-published` (`status`,`published_at`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -260,6 +261,7 @@ CREATE TABLE `news_article` (
 
 LOCK TABLES `news_article` WRITE;
 /*!40000 ALTER TABLE `news_article` DISABLE KEYS */;
+INSERT INTO `news_article` VALUES (1,'世界杯赛事中心上线（演示）','介绍课程项目的赛事查询和数据展示功能。','本网站是基于 Yii2 和 MySQL 开发的世界杯主题课程项目，提供比赛列表、小组积分榜、球队详情及场馆信息查询。所有球队、赛程和比分均为演示数据，不代表官方赛事信息。','赛事新闻','published','2026-10-25 12:23:52',1792927432,1792927432),(2,'小组赛赛程查询功能说明（演示）','介绍比赛时间、比分和场馆信息的查询方式。','用户可以通过比赛列表查看演示赛程，并根据小组和比赛状态筛选比赛。后续可进一步扩展日期筛选和比赛详情查询功能。','赛事新闻','published','2026-10-25 12:23:52',1792927432,1792927432),(3,'世界杯小组积分榜规则（演示）','介绍演示积分榜的积分和排名计算方式。','本项目按照已结束且双方比分完整的小组赛计算演示积分榜。胜一场得3分，平局得1分，负场得0分，同时统计进球、失球和净胜球。','赛事新闻','published','2026-10-25 12:23:52',1792927432,1792927432);
 /*!40000 ALTER TABLE `news_article` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -312,7 +314,7 @@ CREATE TABLE `team_player` (
   PRIMARY KEY (`id`),
   UNIQUE KEY `uq-team_player-team-shirt` (`team_id`,`shirt_number`),
   CONSTRAINT `fk-team_player-team` FOREIGN KEY (`team_id`) REFERENCES `football_team` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -370,7 +372,7 @@ CREATE TABLE `user` (
   UNIQUE KEY `username` (`username`),
   UNIQUE KEY `email` (`email`),
   UNIQUE KEY `password_reset_token` (`password_reset_token`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -379,6 +381,7 @@ CREATE TABLE `user` (
 
 LOCK TABLES `user` WRITE;
 /*!40000 ALTER TABLE `user` DISABLE KEYS */;
+INSERT INTO `user` VALUES (1,'任诗清','H5otDAypmfCdTiBA_gezQuGcQ29VBCX-','$2y$13$RJZLWYzWGYmHY5QfQ28Th.Atq5n2tLZKKPbH9TLv/J3XrWewbKD2C',NULL,'2671792557@qq.com',10,1792912373,1792912373,'uCUbiG2QH67YYJIy5K3WiPB5kRjYWVMV_1792912373');
 /*!40000 ALTER TABLE `user` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -395,4 +398,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2026-10-25 14:49:45
+-- Dump completed on 2026-10-25 19:26:11
