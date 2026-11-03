@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<title>C 部分截图导航</title>
+<style>
+    body { font-family: "Microsoft YaHei", sans-serif; background: #f4f7fb; margin: 0; padding: 28px; color: #223; }
+    h1 { margin: 0 0 6px; font-size: 26px; }
+    .sub { color: #667; margin-bottom: 20px; }
+    .tip { background: #fff8e6; border-left: 4px solid #e6a23c; padding: 12px 16px; border-radius: 4px; margin-bottom: 18px; line-height: 1.7; }
+    .tip b { color: #b26a00; }
+    .grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 14px; }
+    .card { background: #fff; border: 1px solid #e2e8f0; border-radius: 8px; padding: 14px 16px; }
+    .card h3 { margin: 0 0 4px; font-size: 16px; }
+    .card h3 span { display: inline-block; min-width: 28px; color: #2e86c1; }
+    .card p { margin: 0 0 10px; color: #667; font-size: 13px; line-height: 1.5; }
+    .card code { display: block; background: #f6f8fa; padding: 6px 8px; border-radius: 4px; font-size: 12px; color: #555; margin-bottom: 10px; word-break: break-all; }
+    .card a.btn { display: inline-block; background: #2e86c1; color: #fff; text-decoration: none; padding: 7px 14px; border-radius: 4px; font-size: 13px; }
+    .card a.btn:hover { background: #2471a3; }
+    .card.alt a.btn { background: #27ae60; }
+    .card.alt a.btn:hover { background: #1e8449; }
+    .foot { margin-top: 24px; color: #667; font-size: 13px; line-height: 1.8; }
+    .foot code { background: #eef2f7; padding: 2px 5px; border-radius: 3px; }
+</style>
+</head>
+<body>
+
+<h1>C 部分截图导航</h1>
+<div class="sub">点“打开”会在新标签页打开对应页面；浏览器已登录的话不用重复登录。</div>
+
+<div class="tip">
+    <b>截图前：</b>先按 <b>Ctrl + F5</b> 刷新一次。截图工具用 <b>Win + Shift + S</b>，框选后点右下角缩略图，按 <b>Ctrl + S</b> 保存到
+    <code>D:\dsh\repo\worldcup2026-team-main\data\team\screenshots</code>，文件名按编号，例如 <code>01-登录页.png</code>。<br>
+    <b>地址注意：</b>地址栏里只能有 <code>?r=...</code> 这样的英文路由，不要带“（滚动）”等中文说明，否则会 404。<br>
+    <b>想一次截完整页：</b>在 Edge 里按 <b>Ctrl + Shift + S</b>，选“捕获整页”，可以把 02 和 03 一次截下来。
+</div>
+
+<div class="grid">
+
+    <div class="card alt">
+        <h3><span>01</span>后台登录页</h3>
+        <p>要先退出登录，或在 InPrivate 窗口打开；否则会自动跳回首页。</p>
+        <code>http://127.0.0.1:8082/index.php?r=site/login</code>
+        <a class="btn" target="_blank" href="http://127.0.0.1:8082/index.php?r=site/login">打开</a>
+    </div>
+
+    <div class="card">
+        <h3><span>02</span>统计概览（上半）</h3>
+        <p>四个数字卡片 + 小组柱状图。</p>
+        <code>http://127.0.0.1:8082/index.php?r=site/index</code>
+        <a class="btn" target="_blank" href="http://127.0.0.1:8082/index.php?r=site/index">打开</a>
+    </div>
+
+    <div class="card">
+        <h3><span>03</span>统计概览（下半）</h3>
+        <p>和第 02 张是同一个页面，打开后<b>往下滚动</b>：近 7 天留言趋势、快捷操作、系统信息。</p>
+        <code>http://127.0.0.1:8082/index.php?r=site/index</code>
+        <a class="btn" target="_blank" href="http://127.0.0.1:8082/index.php?r=site/index">打开</a>
+    </div>
+
+    <div class="card">
+        <h3><span>04</span>球队列表</h3>
+        <p>8 支球队、筛选栏、“导出 CSV”按钮。</p>
+        <code>http://127.0.0.1:8082/index.php?r=team/index</code>
+        <a class="btn" target="_blank" href="http://127.0.0.1:8082/index.php?r=team/index">打开</a>
+    </div>
+
+    <div class="card">
+        <h3><span>05</span>新增球队表单</h3>
+        <p>填好名称/国家/小组，<b>不要点保存</b>，直接截图。</p>
+        <code>http://127.0.0.1:8082/index.php?r=team/create</code>
+        <a class="btn" target="_blank" href="http://127.0.0.1:8082/index.php?r=team/create">打开</a>
+    </div>
+
+    <div class="card">
+        <h3><span>06</span>球队详情（北星队）</h3>
+        <p>资料 + 编辑/删除按钮。</p>
+        <code>http://127.0.0.1:8082/index.php?r=team/view&amp;id=1</code>
+        <a class="btn" target="_blank" href="http://127.0.0.1:8082/index.php?r=team/view&amp;id=1">打开</a>
+    </div>
+
+    <div class="card">
+        <h3><span>07</span>新闻列表</h3>
+        <p>3 条新闻、状态“已发布”、发布人。</p>
+        <code>http://127.0.0.1:8082/index.php?r=news/index</code>
+        <a class="btn" target="_blank" href="http://127.0.0.1:8082/index.php?r=news/index">打开</a>
+    </div>
+
+    <div class="card">
+        <h3><span>08</span>新闻编辑页</h3>
+        <p>标题、分类、正文、状态下拉。</p>
+        <code>http://127.0.0.1:8082/index.php?r=news/update&amp;id=1</code>
+        <a class="btn" target="_blank" href="http://127.0.0.1:8082/index.php?r=news/update&amp;id=1">打开</a>
+    </div>
+
+    <div class="card">
+        <h3><span>09</span>留言管理列表</h3>
+        <p>待审核那一行有“通过/拒绝”按钮。</p>
+        <code>http://127.0.0.1:8082/index.php?r=message/index</code>
+        <a class="btn" target="_blank" href="http://127.0.0.1:8082/index.php?r=message/index">打开</a>
+    </div>
+
+    <div class="card">
+        <h3><span>10</span>留言审核页</h3>
+        <p>待审核留言 + 回复框 + 通过/拒绝。</p>
+        <code>http://127.0.0.1:8082/index.php?r=message/view&amp;id=2</code>
+        <a class="btn" target="_blank" href="http://127.0.0.1:8082/index.php?r=message/view&amp;id=2">打开</a>
+    </div>
+
+    <div class="card">
+        <h3><span>11</span>团队资料</h3>
+        <p>“越位三剑客”的队名、口号、简介。</p>
+        <code>http://127.0.0.1:8082/index.php?r=team-profile/index</code>
+        <a class="btn" target="_blank" href="http://127.0.0.1:8082/index.php?r=team-profile/index">打开</a>
+    </div>
+
+    <div class="card">
+        <h3><span>12</span>成员管理</h3>
+        <p>任诗清、张雅程、钟一成三人的姓名/学号/分工。</p>
+        <code>http://127.0.0.1:8082/index.php?r=team-member/index</code>
+        <a class="btn" target="_blank" href="http://127.0.0.1:8082/index.php?r=team-member/index">打开</a>
+    </div>
+
+    <div class="card alt">
+        <h3><span>13</span>球员列表（加分）</h3>
+        <p>北星队 5 名演示球员。</p>
+        <code>http://127.0.0.1:8082/index.php?r=player/index</code>
+        <a class="btn" target="_blank" href="http://127.0.0.1:8082/index.php?r=player/index">打开</a>
+    </div>
+
+    <div class="card alt">
+        <h3><span>14</span>操作日志（加分）</h3>
+        <p>谁在何时改了什么。</p>
+        <code>http://127.0.0.1:8082/index.php?r=operation-log/index</code>
+        <a class="btn" target="_blank" href="http://127.0.0.1:8082/index.php?r=operation-log/index">打开</a>
+    </div>
+
+    <div class="card alt">
+        <h3><span>15</span>导出 CSV（加分）</h3>
+        <p>点打开会下载 CSV，用 Excel 打开后截图。</p>
+        <code>http://127.0.0.1:8082/index.php?r=team/export</code>
+        <a class="btn" target="_blank" href="http://127.0.0.1:8082/index.php?r=team/export">下载</a>
+    </div>
+
+</div>
+
+<div class="foot">
+    <b>地址规律：</b>所有页面都是 <code>http://127.0.0.1:8082/index.php?r=路由</code>，<code>r=</code> 后面就是清单里的地址。<br>
+    <b>也可以不记地址：</b>顶部菜单“内容管理 / 团队设置 / 系统管理”点进去，地址栏会自动变成对应路由。<br>
+    <b>Git 提交记录（第 17 张）：</b>运行提交脚本后，在项目目录执行 <code>git log --oneline --graph</code> 截图。<br>
+    <b>数据库表（可选）：</b>后台首页右下角“系统信息”已显示 15 张表、13 条迁移，可直接截这部分。
+</div>
+
+</body>
+</html>

@@ -18,6 +18,7 @@ use yii\web\IdentityInterface;
  * @property string $email
  * @property string $auth_key
  * @property integer $status
+ * @property integer $is_admin
  * @property integer $created_at
  * @property integer $updated_at
  * @property string $password write-only password
@@ -55,6 +56,37 @@ class User extends ActiveRecord implements IdentityInterface
         return [
             ['status', 'default', 'value' => self::STATUS_INACTIVE],
             ['status', 'in', 'range' => [self::STATUS_ACTIVE, self::STATUS_INACTIVE, self::STATUS_DELETED]],
+            ['is_admin', 'default', 'value' => 0],
+            ['is_admin', 'integer'],
+        ];
+    }
+
+    /**
+     * 是否为后台管理员。
+     *
+     * 迁移 m261101_120000 给 user 表新增 is_admin 字段，
+     * 只有该字段为 1 的账号才能进入后台管理页面。
+     *
+     * @return bool
+     */
+    public function isAdmin()
+    {
+        return (int) $this->is_admin === 1;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function attributeLabels()
+    {
+        return [
+            'id' => '用户编号',
+            'username' => '用户名',
+            'email' => '邮箱',
+            'status' => '状态',
+            'is_admin' => '后台管理员',
+            'created_at' => '创建时间',
+            'updated_at' => '更新时间',
         ];
     }
 

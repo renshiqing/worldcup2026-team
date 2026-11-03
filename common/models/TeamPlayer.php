@@ -47,4 +47,14 @@ class TeamPlayer extends ActiveRecord
             'created_at' => '创建时间',
         ];
     }
+
+    /**
+     * 所属球队。
+     *
+     * @return \yii\db\ActiveQuery
+     */
+    public function getTeam()
+    {
+        return $this->hasOne(FootballTeam::class, ['id' => 'team_id']);
+    }
 }

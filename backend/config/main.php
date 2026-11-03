@@ -8,11 +8,20 @@ $params = array_merge(
 
 return [
     'id' => 'app-backend',
+    'name' => '世界杯后台管理',
     'basePath' => dirname(__DIR__),
     'controllerNamespace' => 'backend\controllers',
+    'language' => 'zh-CN',
+    'timeZone' => 'Asia/Shanghai',
     'bootstrap' => ['log'],
     'modules' => [],
     'components' => [
+        'formatter' => [
+            'dateFormat' => 'php:Y-m-d',
+            'datetimeFormat' => 'php:Y-m-d H:i',
+            'timeFormat' => 'php:H:i',
+            'nullDisplay' => '—',
+        ],
         'request' => [
             'csrfParam' => '_csrf-backend',
         ],
