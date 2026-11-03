@@ -119,3 +119,283 @@ a.desc:after {
 .nav > li > form > button.logout:focus {
     outline: none;
 }
+
+/* ===== C：后台统计与列表页面样式 ===== */
+
+.stat-row .stat-card {
+    background: #fff;
+    border: 1px solid #e3e3e3;
+    border-top: 4px solid #337ab7;
+    border-radius: 6px;
+    padding: 18px;
+    margin-bottom: 20px;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, .05);
+}
+
+.stat-card .stat-number {
+    font-size: 34px;
+    font-weight: 700;
+    line-height: 1.1;
+    color: #333;
+}
+
+.stat-card .stat-label {
+    margin-top: 4px;
+    color: #777;
+}
+
+.stat-card .stat-link {
+    display: inline-block;
+    margin-top: 8px;
+    font-size: 12px;
+    color: #337ab7;
+}
+
+.stat-blue {
+    border-top-color: #337ab7;
+}
+
+.stat-green {
+    border-top-color: #5cb85c;
+}
+
+.stat-purple {
+    border-top-color: #8e44ad;
+}
+
+.stat-orange {
+    border-top-color: #e67e22;
+}
+
+.bar-chart .bar-row {
+    display: flex;
+    align-items: center;
+    margin-bottom: 8px;
+}
+
+.bar-chart .bar-label {
+    width: 52px;
+    font-size: 13px;
+    color: #555;
+}
+
+.bar-chart .bar-track {
+    flex: 1;
+    height: 18px;
+    margin: 0 10px;
+    background: #f2f2f2;
+    border-radius: 3px;
+    overflow: hidden;
+}
+
+.bar-chart .bar-fill {
+    height: 100%;
+    min-width: 2px;
+    border-radius: 3px;
+    background: linear-gradient(90deg, #5cb85c, #337ab7);
+}
+
+.bar-chart .bar-value {
+    width: 44px;
+    font-size: 12px;
+    color: #777;
+    text-align: right;
+}
+
+.filter-form {
+    margin-bottom: 15px;
+    padding: 12px;
+    background: #f8f8f8;
+    border: 1px solid #eee;
+    border-radius: 4px;
+}
+
+.filter-form .form-group {
+    margin-right: 10px;
+}
+
+.quick-links .btn {
+    margin-bottom: 8px;
+}
+
+.news-content {
+    line-height: 1.8;
+}
+
+.inline-block {
+    display: inline-block;
+    margin-right: 6px;
+}
+
+.table > tbody > tr > td {
+    vertical-align: middle;
+}
+
+.action-column .btn {
+    margin-right: 2px;
+}
+
+/* ===== C：统计首页增强 ===== */
+
+.page-head h1 {
+    margin-top: 0;
+}
+
+.stat-card {
+    position: relative;
+    overflow: hidden;
+    transition: box-shadow .2s ease, transform .2s ease;
+}
+
+.stat-card:hover {
+    box-shadow: 0 6px 16px rgba(0, 0, 0, .12);
+    transform: translateY(-2px);
+}
+
+.stat-card .stat-icon {
+    position: absolute;
+    top: 10px;
+    right: 14px;
+    font-size: 42px;
+    line-height: 1;
+    color: #000;
+    opacity: .08;
+}
+
+.mini-row {
+    margin-bottom: 5px;
+}
+
+.mini-stat {
+    background: #fff;
+    border: 1px solid #e3e3e3;
+    border-radius: 6px;
+    padding: 12px 16px;
+    margin-bottom: 15px;
+}
+
+.mini-stat .mini-number {
+    margin-right: 8px;
+    font-size: 22px;
+    font-weight: 700;
+    color: #333;
+}
+
+.mini-stat .mini-label {
+    font-size: 13px;
+    color: #777;
+}
+
+.panel-heading .badge {
+    margin-left: 6px;
+    background: #337ab7;
+}
+
+.small-note {
+    margin-top: 12px;
+    margin-bottom: 0;
+    font-size: 12px;
+}
+
+.bar-chart .bar-value {
+    width: 88px;
+}
+
+.msg-row {
+    display: flex;
+    align-items: center;
+    margin-bottom: 14px;
+}
+
+.msg-row .msg-label {
+    width: 64px;
+    font-size: 13px;
+    color: #555;
+}
+
+.msg-row .msg-track {
+    flex: 1;
+    height: 14px;
+    margin: 0 10px;
+    background: #f2f2f2;
+    border-radius: 3px;
+    overflow: hidden;
+}
+
+.msg-row .msg-fill {
+    height: 100%;
+    min-width: 2px;
+    border-radius: 3px;
+}
+
+.msg-fill.pending {
+    background: #f0ad4e;
+}
+
+.msg-fill.approved {
+    background: #5cb85c;
+}
+
+.msg-fill.rejected {
+    background: #d9534f;
+}
+
+.msg-row .msg-count {
+    width: 36px;
+    font-weight: 600;
+    text-align: right;
+    color: #333;
+}
+
+.quick-panel .quick-actions .btn {
+    margin: 0 8px 8px 0;
+}
+
+/* 近 7 天留言趋势 */
+
+.trend-chart {
+    display: flex;
+    align-items: flex-end;
+    gap: 18px;
+    height: 180px;
+    padding: 0 4px;
+}
+
+.trend-col {
+    display: flex;
+    flex: 1;
+    flex-direction: column;
+    align-items: center;
+    height: 100%;
+}
+
+.trend-count {
+    margin-bottom: 4px;
+    font-weight: 600;
+    color: #333;
+}
+
+.trend-track {
+    display: flex;
+    flex: 1;
+    align-items: flex-end;
+    justify-content: center;
+    width: 100%;
+    max-width: 70px;
+    background: #f7f9fb;
+    border-radius: 4px;
+}
+
+.trend-bar {
+    width: 60%;
+    min-height: 2px;
+    border-radius: 3px 3px 0 0;
+    background: linear-gradient(180deg, #5cb85c, #337ab7);
+}
+
+.trend-label {
+    margin-top: 6px;
+    font-size: 12px;
+    color: #777;
+}
+

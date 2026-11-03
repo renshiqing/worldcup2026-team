@@ -1,4 +1,11 @@
 <?php
+/**
+ * 世界杯赛事信息与球迷交流平台
+ * 文件：backend/views/layouts/main.php
+ * 功能：后台布局与导航菜单
+ * 作者：C（后台管理与统计）
+ * 日期：2026-11-01
+ */
 
 /* @var $this \yii\web\View */
 /* @var $content string */
@@ -29,22 +36,44 @@ AppAsset::register($this);
 <div class="wrap">
     <?php
     NavBar::begin([
-        'brandLabel' => Yii::$app->name,
+        'brandLabel' => '世界杯后台管理',
         'brandUrl' => Yii::$app->homeUrl,
         'options' => [
             'class' => 'navbar-inverse navbar-fixed-top',
         ],
     ]);
     $menuItems = [
-        ['label' => 'Home', 'url' => ['/site/index']],
+        ['label' => '统计概览', 'url' => ['/site/index']],
+        [
+            'label' => '内容管理',
+            'items' => [
+                ['label' => '球队管理', 'url' => ['/team/index']],
+                ['label' => '球员管理', 'url' => ['/player/index']],
+                ['label' => '新闻管理', 'url' => ['/news/index']],
+                ['label' => '留言管理', 'url' => ['/message/index']],
+            ],
+        ],
+        [
+            'label' => '团队设置',
+            'items' => [
+                ['label' => '团队资料', 'url' => ['/team-profile/index']],
+                ['label' => '成员管理', 'url' => ['/team-member/index']],
+            ],
+        ],
+        [
+            'label' => '系统管理',
+            'items' => [
+                ['label' => '操作日志', 'url' => ['/operation-log/index']],
+            ],
+        ],
     ];
     if (Yii::$app->user->isGuest) {
-        $menuItems[] = ['label' => 'Login', 'url' => ['/site/login']];
+        $menuItems[] = ['label' => '登录', 'url' => ['/site/login']];
     } else {
         $menuItems[] = '<li>'
             . Html::beginForm(['/site/logout'], 'post')
             . Html::submitButton(
-                'Logout (' . Yii::$app->user->identity->username . ')',
+                '退出（' . Html::encode(Yii::$app->user->identity->username) . '）',
                 ['class' => 'btn btn-link logout']
             )
             . Html::endForm()
