@@ -8,10 +8,19 @@ $params = array_merge(
 
 return [
     'id' => 'app-frontend',
+    'name' => '2026 世界杯赛事信息与球迷交流平台',
     'basePath' => dirname(__DIR__),
-    'bootstrap' => ['log'],
     'controllerNamespace' => 'frontend\controllers',
+    'language' => 'zh-CN',
+    'timeZone' => 'Asia/Shanghai',
+    'bootstrap' => ['log'],
     'components' => [
+        'formatter' => [
+            'dateFormat' => 'php:Y-m-d',
+            'datetimeFormat' => 'php:Y-m-d H:i',
+            'timeFormat' => 'php:H:i',
+            'nullDisplay' => '—',
+        ],
         'request' => [
             'csrfParam' => '_csrf-frontend',
         ],

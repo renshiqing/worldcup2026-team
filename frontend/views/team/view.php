@@ -17,6 +17,14 @@ $statusLabels = [
     <div class="panel panel-primary">
         <div class="panel-heading"><h2 class="panel-title"><?= Html::encode($team['name']) ?></h2></div>
         <div class="panel-body">
+            <?php
+            // 球队表没有简介字段，这里用名称、国家和小组拼出一句简介，避免详情页信息过于单薄。
+            $teamIntro = $team['name'] . ' 是一支来自' . $team['country'] . '的演示球队';
+            $teamIntro .= empty($team['group_name'])
+                ? '，目前尚未分组。'
+                : '，目前在 ' . $team['group_name'] . ' 组参赛。';
+            ?>
+            <p class="lead"><?= Html::encode($teamIntro) ?></p>
             <p><strong>球队编号：</strong><?= Html::encode($team['id']) ?></p>
             <p><strong>国家或地区：</strong><?= Html::encode($team['country']) ?></p>
             <p><strong>所属小组：</strong><?= Html::encode($team['group_name'] ?? '未分组') ?></p>
