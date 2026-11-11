@@ -5,11 +5,17 @@ use frontend\models\ResendVerificationEmailForm;
 use frontend\models\VerifyEmailForm;
 use Yii;
 use yii\base\InvalidArgumentException;
+use yii\db\Query;
 use yii\web\BadRequestHttpException;
 use yii\web\Controller;
 use yii\filters\VerbFilter;
 use yii\filters\AccessControl;
+use common\models\FanMessage;
+use common\models\FootballTeam;
 use common\models\LoginForm;
+use common\models\NewsArticle;
+use common\models\TeamMember;
+use common\models\TeamProfile;
 use frontend\models\PasswordResetRequestForm;
 use frontend\models\ResetPasswordForm;
 use frontend\models\SignupForm;
@@ -70,11 +76,84 @@ class SiteController extends Controller
     /**
      * Displays homepage.
      *
+     * 首页数据全部来自数据库：统计数字、最新新闻、近期比赛、
+     * 团队资料与成员、已通过审核的留言，刷新页面即可看到后台的改动。
+     *
      * @return mixed
      */
     public function actionIndex()
     {
-        return $this->render('index');
+        $stats = [
+            'teams' => (int) FootballTeam::find()->count(),
+            'matches' => (int) (new Query())->from('{{%football_match}}')->count(),
+            'news' => (int) NewsArticle::findPublished()->count(),
+            'stadiums' => (int) (new Query())->from('{{%stadium}}')->count(),
+        ];
+
+        $latestNews = NewsArticle::findPublished()
+            ->orderBy(['published_at' => SORT_DESC, 'id' => SORT_DESC])
+            ->limit(3)
+            ->all();
+
+        // 优先展示待开赛/进行中的比赛；没有时退回到最近结束的比赛。
+        $highlightMatches = $this->createMatchQuery()
+            ->where(['m.status' => ['scheduled', 'live']])
+            ->orderBy(['m.kickoff_at' => SORT_ASC, 'm.id' => SORT_ASC])
+            ->limit(4)
+            ->all();
+
+        if (empty($highlightMatches)) {
+            $highlightMatches = $this->createMatchQuery()
+                ->where(['m.status' => 'finished'])
+                ->orderBy(['m.kickoff_at' => SORT_DESC, 'm.id' => SORT_DESC])
+                ->limit(4)
+                ->all();
+        }
+
+        return $this->render('index', [
+            'stats' => $stats,
+            'latestNews' => $latestNews,
+            'highlightMatches' => $highlightMatches,
+            'profile' => TeamProfile::current(),
+            'members' => TeamMember::ordered(),
+            'latestMessages' => FanMessage::find()
+                ->where(['status' => FanMessage::STATUS_APPROVED])
+                ->orderBy(['created_at' => SORT_DESC, 'id' => SORT_DESC])
+                ->limit(3)
+                ->all(),
+        ]);
+    }
+
+    /**
+     * 比赛公共查询：比赛 + 阶段 + 小组 + 双方球队 + 场馆 + 城市。
+     *
+     * @return Query
+     */
+    private function createMatchQuery()
+    {
+        return (new Query())
+            ->select([
+                'm.id',
+                'm.kickoff_at',
+                'm.home_score',
+                'm.away_score',
+                'm.status',
+                'home_team_id' => 'home.id',
+                'away_team_id' => 'away.id',
+                'home_team' => 'home.name',
+                'away_team' => 'away.name',
+                'stage_name' => 'stage.stage_name',
+                'group_name' => 'grp.group_name',
+                'stadium_name' => 'stadium.name',
+                'city_name' => 'city.name',
+            ])
+            ->from(['m' => '{{%football_match}}'])
+            ->innerJoin(['stage' => '{{%match_stage}}'], 'stage.id = m.stage_id')
+            ->leftJoin(['grp' => '{{%tournament_group}}'], 'grp.id = m.group_id')
+            ->innerJoin(['home' => '{{%football_team}}'], 'home.id = m.home_team_id')
+            ->innerJoin(['away' => '{{%football_team}}'], 'away.id = m.away_team_id')
+            ->leftJoin(['stadium' => '{{%stadium}}'], 'stadium.id = m.stadium_id')
+            ->leftJoin(['city' => '{{%host_city}}'], 'city.id = stadium.city_id');
     }
 
     /**
@@ -136,13 +215,24 @@ class SiteController extends Controller
     }
 
     /**
-     * Displays about page.
+     * 团队介绍页：团队资料、三名成员和项目协作说明。
      *
      * @return mixed
      */
     public function actionAbout()
     {
-        return $this->render('about');
+        return $this->render('about', [
+            'profile' => TeamProfile::current(),
+            'members' => TeamMember::ordered(),
+            'stats' => [
+                'teams' => (int) FootballTeam::find()->count(),
+                'matches' => (int) (new Query())->from('{{%football_match}}')->count(),
+                'news' => (int) NewsArticle::findPublished()->count(),
+                'messages' => (int) FanMessage::find()
+                    ->where(['status' => FanMessage::STATUS_APPROVED])
+                    ->count(),
+            ],
+        ]);
     }
 
     /**
