@@ -25,12 +25,16 @@
 
 ### 2.1 启动（管理员或演示者操作）
 
-在项目根目录执行：
+在项目根目录执行（老师软件包 XAMPP 8.2.12，PHP 8.2.12）：
 
 ```bat
-php -S 127.0.0.1:8081 -t frontend\web
-php -S 127.0.0.1:8082 -t backend\web
+C:\xampp\php\php.exe -S 127.0.0.1:8081 -t frontend\web
+C:\xampp\php\php.exe -S 127.0.0.1:8082 -t backend\web
 ```
+
+> 数据库用 XAMPP 的 MariaDB 10.4.32，本机端口 **3307**（3306 被系统 MySQL 8.0 占用）。
+> 如果页面提示数据库连接失败，先在 XAMPP Control Panel 里确认 MySQL 已启动，
+> 并检查 `common/config/main-local.php` 的 `dsn` 端口是否为 3307。
 
 ### 2.2 访问地址
 

@@ -31,24 +31,36 @@
 
 ### 2.1 环境
 
-- Windows + PHP 8.x（需要 `pdo_mysql`、`mbstring`）
-- MySQL 8 / MariaDB 10.x，数据库名 `worldcup2026_team`
+- 老师软件包：XAMPP 8.2.12（PHP 8.2.12 + MariaDB 10.4.32 + Apache 2.4.58）
+- 框架：Yii advanced 2.0.32（`composer.lock` 与包内模板一致）
+- PHP 扩展：`pdo_mysql`、`mbstring`（XAMPP 默认已启用）；B 不使用 `intl`、`gd`
+- 数据库：MariaDB 10.4.32，库名 `worldcup2026_team`；本机 XAMPP 端口 **3307**（3306 是系统 MySQL 8.0）
 - 前台端口 8081，后台端口 8082
 - 浏览器：Chrome / Edge
 
-### 2.2 首次安装
+### 2.2 首次安装（本机老师包）
 
 ```bat
-composer install --ignore-platform-reqs
-php init
-php yii migrate
-php -S 127.0.0.1:8081 -t frontend\web
-php -S 127.0.0.1:8082 -t backend\web
+set "PHP=C:\xampp\php\php.exe"
+set "COMPOSER=..\tools\composer.phar"
+
+:: XAMPP 的 zip 扩展默认关闭，临时加载它，Composer 才能解压依赖
+"%PHP%" -d extension=zip "%COMPOSER%" install --ignore-platform-reqs
+"%PHP%" init
+
+:: 建库（XAMPP MariaDB 3307）
+"C:\xampp\mysql\bin\mysql.exe" -u root -P 3307 -e "CREATE DATABASE IF NOT EXISTS worldcup2026_team DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;"
+"%PHP%" yii migrate --interactive=0
+
+"%PHP%" -S 127.0.0.1:8081 -t frontend\web
+"%PHP%" -S 127.0.0.1:8082 -t backend\web
 ```
 
 - `php init` 选 `0 Development`；
-- `common/config/main-local.php` 里把 `dsn` 指向本地数据库；
-- 管理后台账号由 C 的命令创建：`php yii admin/create admin admin@example.com 123456`。
+- `common/config/main-local.php` 里把 `dsn` 指向本地数据库（本机端口 3307，示例见 `README-B.md`）；
+- 仓库的 `composer.lock` 中 `doctrine/lexer 1.2.0` 要求 PHP `^7.2`，PHP 8.2 安装要加 `--ignore-platform-reqs`；
+- 不要在项目里用 `tools\php.cmd`（PHP 8.3.36），它和老师包的 PHP 8.2.12 不是同一版本；
+- 管理后台账号由 C 的命令创建：`"%PHP%" yii admin/create admin admin@example.com 123456`。
 
 ### 2.3 入口地址
 
@@ -333,8 +345,8 @@ $messages = empty($ids) ? [] : FanMessage::find()
 
 ### 8.2 待本地执行：运行验证清单
 
-> 本工作区（clone 下来的仓库）没有安装 PHP，无法启动 Yii 应用，
-> 所以下面的浏览器实测需要在装有 PHP 8 + MySQL 的机器上执行并打勾。
+> 当前已安装 XAMPP PHP 8.2.12，但仓库还没有 `vendor`（Composer 依赖尚未安装），
+> 所以下面的浏览器实测需要先执行 `composer install`、`php init`、建库和启动，再逐项打勾。
 
 | # | 测试项 | 预期 | 结果 |
 |---|---|---|---|
@@ -377,7 +389,7 @@ $messages = empty($ids) ? [] : FanMessage::find()
 
 ## 十、已知限制
 
-1. 当前工作区没有 PHP/MySQL 运行环境，页面实测和截图需要本地补；
+1. 当前仓库还没有 `vendor`，页面实测和截图需要先安装依赖、建库并启动；
 2. “我的留言”基于浏览器会话，换浏览器看不到历史记录；
 3. 留言没有图形验证码，用蜜罐 + 10 秒间隔做最低限度的防刷；
 4. 新闻正文是纯文本，没有富文本编辑器；

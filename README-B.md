@@ -51,26 +51,42 @@ B 的改动都在 `frontend/`、`console/migrations/m261111_120000_seed_team_dem
 
 ### 2. 安装依赖与初始化
 
+> **老师软件包版本**：XAMPP 8.2.12（PHP 8.2.12 + MariaDB 10.4.32 + Apache 2.4.58）
+> + Yii advanced 2.0.32。本机 XAMPP 装在 `C:\xampp`，PHP 不在 PATH；
+> XAMPP 的 MariaDB 跑在 **3307**（3306 被系统 MySQL 8.0 占用）；
+> Composer 在 `..\tools\composer.phar`。核对详情见 `docs/B-软件包核对报告.md`。
+
 ```bat
-composer install --ignore-platform-reqs
-php init
+set "PHP=C:\xampp\php\php.exe"
+set "COMPOSER=..\tools\composer.phar"
+
+:: XAMPP 的 zip 扩展默认关闭，用 -d 临时加载，Composer 才能解压依赖
+"%PHP%" -d extension=zip "%COMPOSER%" install --ignore-platform-reqs
+"%PHP%" init
 ```
 
-`php init` 选 `0 Development`，输入 `yes`。然后在 `common/config/main-local.php` 里确认数据库：
+`php init` 选 `0 Development`，输入 `yes`。然后在 `common/config/main-local.php` 里确认数据库（本机 XAMPP MariaDB 是 3307）：
 
 ```php
-'dsn' => 'mysql:host=127.0.0.1;port=3306;dbname=worldcup2026_team',
+'dsn' => 'mysql:host=127.0.0.1;port=3307;dbname=worldcup2026_team;charset=utf8mb4',
 'username' => 'root',
 'password' => '',
 ```
 
-> 仓库的 `composer.lock` 是旧环境生成的，PHP 8.2 直接 `composer install` 会报
-> `doctrine/lexer requires php ^7.2`，加 `--ignore-platform-reqs` 即可。
+> - 仓库的 `composer.lock` 是老师模板 2.0.32 自带的，`doctrine/lexer 1.2.0` 要求 PHP `^7.2`，
+>   PHP 8.2 直接安装会报平台错误，加 `--ignore-platform-reqs` 即可。
+> - 如果已经在 `C:\xampp\php\php.ini` 里取消 `;extension=zip` 的注释，可以去掉 `-d extension=zip`。
+> - 不要用 `tools\php.cmd`（那是作业用的 PHP 8.3.36），本项目用老师包里的 PHP 8.2.12。
+> - 第 3、4 节继续使用这里设置的 `%PHP%`；如果新开命令行窗口，先重新执行上面两行 `set`。
 
 ### 3. 建库并执行迁移
 
 ```bat
-php yii migrate
+:: 建库（XAMPP MariaDB，端口 3307）
+"C:\xampp\mysql\bin\mysql.exe" -u root -P 3307 -e "CREATE DATABASE IF NOT EXISTS worldcup2026_team DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;"
+
+:: 执行 A/C/B 的迁移和演示数据
+"%PHP%" yii migrate --interactive=0
 ```
 
 这条命令会执行 B 新增的数据迁移 `m261111_120000_seed_team_demo_data`：
@@ -79,14 +95,18 @@ php yii migrate
 - 如果 `team_member` 为空，插入三名成员和分工（学号留空，可在后台补）；
 - 如果后台已经维护过团队资料或成员，迁移自动跳过，不会覆盖、不会重复插入。
 
-**如果数据库是用 `data/install.sql` 恢复的**：导入后再执行一次 `php yii migrate` 即可，
+**如果数据库是用 `data/install.sql` 恢复的**：先导入，再执行一次 `"%PHP%" yii migrate --interactive=0` 即可，
 `install.sql` 的 migration 表里没有 B 这条迁移，所以只会补这一条数据。
+
+```bat
+"C:\xampp\mysql\bin\mysql.exe" -u root -P 3307 --default-character-set=utf8mb4 < data\install.sql
+```
 
 ### 4. 启动前后台
 
 ```bat
-php -S 127.0.0.1:8081 -t frontend\web
-php -S 127.0.0.1:8082 -t backend\web
+"%PHP%" -S 127.0.0.1:8081 -t frontend\web
+"%PHP%" -S 127.0.0.1:8082 -t backend\web
 ```
 
 - 前台：`http://127.0.0.1:8081/index.php?r=site/index`
@@ -113,8 +133,10 @@ frontend/views/site/_member.php                         成员卡片（首页与
 console/migrations/m261111_120000_seed_team_demo_data.php  团队资料与三名成员演示数据
 docs/B-前台实现文档.md                                   实现文档（范围、结构、功能、自测清单）
 docs/B-用户操作手册.md                                   用户手册（普通用户 + 管理员配合）
+docs/B-软件包核对报告.md                                 老师软件包（XAMPP 8.2.12）核对与运行命令
 data/team/docs/B-前台实现文档.md / .docx                 提交目录里的实现文档（Word 可直接交）
 data/team/docs/B-用户操作手册.md / .docx                 提交目录里的用户手册（Word 可直接交）
+data/team/docs/B-软件包核对报告.md / .docx               提交目录里的核对报告
 data/team/screenshots/B-截图说明.md                   截图时的页面地址与命名对照
 README-B.md                                             本文件
 ```
@@ -188,7 +210,8 @@ frontend/web/css/site.css                   首页、新闻、留言、团队页
 
 ## 七、Git 提交
 
-B 的代码在 `dev-frontend` 分支，按模块分成 6 次提交：
+B 的代码在 `dev-frontend` 分支，按模块分成 6 次代码提交；2026-11-22 核查老师软件包后，
+补了 1 次文档提交（共 7 次）：
 
 | # | 提交信息 | 内容 |
 |---|---|---|
@@ -198,6 +221,7 @@ B 的代码在 `dev-frontend` 分支，按模块分成 6 次提交：
 | 4 | `feat(frontend): 首页与团队介绍改为数据库驱动` | SiteController、site/index、site/about、_member |
 | 5 | `style(frontend): 统一导航、页面样式与中文错误页` | layouts/main、site.css、site/error、team/view、config/main |
 | 6 | `docs: B 前台实现文档、用户操作手册与交付说明` | README-B、docs |
+| 7 | `docs: 老师软件包核对报告与 XAMPP 8.2.12 运行命令` | 核对报告、README-B、实现文档、用户手册 |
 
 合并后执行 `git log --oneline --graph --all` 截图，作为 B 的提交证据。
 
@@ -205,7 +229,8 @@ B 的代码在 `dev-frontend` 分支，按模块分成 6 次提交：
 
 ## 八、已知限制
 
-1. **截图待补**：本工作区没有 PHP/MySQL 运行环境，页面实测和截图需要在本地启动后完成。
+1. **截图待补**：当前工作区还没有安装 Composer 依赖（没有 `vendor`），页面实测和截图需要在
+   `composer install`、`php init`、建库启动之后完成（见 `docs/B-软件包核对报告.md`）。
 2. “我的留言”按浏览器会话记录，最多保留最近 20 条；换浏览器或清空会话后看不到历史。
 3. 留言审核状态只能后台修改，前台不提供改状态的入口（符合分工）。
 4. 新闻正文是纯文本，换行用 `nl2br`，没有富文本编辑器（避免 XSS）。
