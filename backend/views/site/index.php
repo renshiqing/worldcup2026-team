@@ -63,7 +63,7 @@ $messageTotalSafe = max(1, (int) $messageTotal);
                 <div class="stat-icon"><span class="glyphicon glyphicon-calendar"></span></div>
                 <div class="stat-number"><?= (int) $matchCount ?></div>
                 <div class="stat-label">比赛总数</div>
-                <span class="stat-link">由 A 的比赛模块维护</span>
+                <span class="stat-link">由任诗清的比赛模块维护</span>
             </div>
         </div>
         <div class="col-md-3 col-sm-6">
@@ -314,3 +314,4 @@ $messageTotalSafe = max(1, (int) $messageTotal);
     </div>
 
 </div>
+
